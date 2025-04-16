@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven 3.8.1'  // Name of Maven installation in Jenkins
+    }
+
+    environment {
+        SONARQUBE_SCANNER_HOME = tool 'SonarScanner'  // Name of SonarScanner in Jenkins
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Clones your Git repo - make sure branch and URL are correct
+                git branch: 'DEV', url: 'https://github.com/your-username/your-repo.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Compiles the code using Maven
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                // Runs code quality scan with SonarScanner
+                withSonarQubeEnv('My SonarQube Server') {
+                    sh "${env.SONARQUBE_SCANNER_HOME}/bin/sonar-scanner"
+                }
+            }
+        }
+    }
+}
+
