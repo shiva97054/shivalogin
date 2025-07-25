@@ -2,7 +2,7 @@ name: Hello, World!
 on:
   push:
     branches:
-      - main
+      - DEV
 jobs:
   say_hello:
     runs-on: ubuntu-latest
